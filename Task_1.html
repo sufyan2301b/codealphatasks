@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Age Calculator</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    
+    <!-- Bootstrap CSS v5.3.2 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+
+    <style>
+        /* CSS Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            box-sizing: border-box;
+        }
+
+        /* Container styling */
+        .container {
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, aqua, blue);
+            color: antiquewhite;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Calculator styling */
+        .calculator {
+            width: 100%;
+            max-width: 600px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        /* Heading styling */
+        .calculator h1 {
+            font-size: 50px;
+            margin-bottom: 20px;
+        }
+
+        .calculator h1 span {
+            color: #ffff76;
+        }
+
+        /* Input box styling */
+        .input-box {
+            margin: 40px 0;
+            padding: 35px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Input field styling */
+        .input-box input {
+            flex: 1;
+            margin-right: 20px;
+            padding: 14px 20px;
+            border: 0;
+            outline: 0;
+            font-size: 20px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        /* Button styling */
+        .input-box button {
+            background: #ffff76;
+            border: 0;
+            outline: 0;
+            padding: 15px 30px;
+            border-radius: 5px;
+            font-weight: 500;
+            color: black;
+            cursor: pointer;
+        }
+
+        /* Hover and focus effects */
+        .input-box button:hover {
+            background: #f0f0f0;
+        }
+
+        .input-box button:focus {
+            outline: 2px solid #ffff76;
+        }
+
+        /* Input date picker indicator styling */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            background-position: center;
+            background-size: 24px;
+            cursor: pointer;
+        }
+
+        /* Result styling */
+        #result {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+
+        #result span {
+            color: #ffff76;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="calculator">
+            <h1>JavaScript<br><span>Age Calculator</span></h1>
+            <div class="input-box">
+                <input type="date" id="date">
+                <button onclick="calculateAge()">Calculate</button>
+            </div>
+            <p id="result"></p>
+        </div>
+    </div>
+
+    <!-- Age Calculator JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            let userInput = document.getElementById("date");
+            userInput.max = new Date().toISOString().split("T")[0];
+            let result = document.getElementById("result");
+
+            function calculateAge() {
+                let birthdate = new Date(userInput.value);
+                if (isNaN(birthdate.getTime()) || birthdate > new Date()) {
+                    result.innerHTML = 'Please select a valid date in the past.';
+                    return;
+                }
+
+                let today = new Date();
+                let ageYears = today.getFullYear() - birthdate.getFullYear();
+                let ageMonths = today.getMonth() - birthdate.getMonth();
+                let ageDays = today.getDate() - birthdate.getDate();
+
+                if (ageMonths < 0 || (ageMonths === 0 && ageDays < 0)) {
+                    ageYears--;
+                    ageMonths += 12;
+                }
+
+                if (ageDays < 0) {
+                    ageDays += getDaysInMonth(birthdate.getFullYear(), birthdate.getMonth());
+                    ageMonths--;
+                }
+
+                if (ageMonths < 0) {
+                    ageMonths += 12;
+                    ageYears--;
+                }
+
+                result.innerHTML = `You are <span>${ageYears}</span> years, <span>${ageMonths}</span> months, and <span>${ageDays}</span> days old.`;
+            }
+
+            function getDaysInMonth(year, month) {
+                return new Date(year, month + 1, 0).getDate();
+            }
+
+            // Make the calculateAge function available globally
+            window.calculateAge = calculateAge;
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+</body>
+</html>
